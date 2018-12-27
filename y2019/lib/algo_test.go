@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"flag"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
@@ -10,18 +11,56 @@ var (
 )
 
 func TestAlgo(t *testing.T) {
+	flag.Set("logtostderr", "true")
+	flag.Set("v", "3")
+
 	req := Request{
-		MonthlyIncome: 15000,
-		TaxBase:       TAX_BASE,
-		Insurrance:    3200,
-		Months:        1,
+		MonthlyIncome:     15000,
+		TaxBase:           TAX_BASE,
+		Insurrance:        3200,
+		AdditionalTaxFree: 3500,
+		Months:            1,
 	}
-	Convey("Calc 1", t, func() {
-		res, err := Calc(req)
+
+	res, err := Calc(req)
+	Convey("Calc example", t, func() {
 		So(err, ShouldBeNil)
 		So(res.Deducts, ShouldHaveLength, 1)
 		So(res.Deducts[0], ShouldEqual, 99)
 		//So(res.Deducts, ShouldAlmostEqual, 99)
+	})
+
+	Convey("Calc test", t, func() {
+		req = Request{
+			MonthlyIncome:     25000,
+			TaxBase:           TAX_BASE,
+			Insurrance:        532.14,
+			AdditionalTaxFree: 3000,
+			Months:            1,
+		}
+
+		runPassedTest := false
+		if runPassedTest {
+			res, err = Calc(req)
+			So(err, ShouldBeNil)
+			So(res.Deducts, ShouldHaveLength, 1)
+			So(res.Deducts[0], ShouldEqual, 494.0358)
+
+			req.Months = 2
+			res, err = Calc(req)
+			So(err, ShouldBeNil)
+			So(res.Deducts, ShouldHaveLength, 2)
+			So(res.Deducts[0], ShouldEqual, 494.0358)
+			So(res.Deducts[1], ShouldEqual, 494.0358)
+		}
+
+		req.Months = 3
+		res, err = Calc(req)
+		So(err, ShouldBeNil)
+		So(res.Deducts, ShouldHaveLength, 3)
+		So(res.Deducts[0], ShouldEqual, 494.0358)
+		So(res.Deducts[1], ShouldEqual, 494.0358)
+		So(res.Deducts[2], ShouldAlmostEqual, 1432.2864)
 	})
 }
 

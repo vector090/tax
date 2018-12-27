@@ -29,11 +29,20 @@ func main() {
 		panic(err)
 	}
 	//fmt.Printf("%+v\n", result)
-	fmt.Println("Months\t", *months)
+	fmt.Println("==================")
+	fmt.Println("2019年新个税计算")
+	fmt.Println("==================")
+	fmt.Printf("月收入（税前）%.2f\n个税起征点%.0f\n五险一金%.02f\n个税专项附加扣除%.0f\n", *monthlyIncome, *taxBase, *insurrance, *additionalTaxFree)
+	fmt.Println("计算月数:", *months)
 	//fmt.Println("Deducts\t", result.Deducts)
 	//fmt.Println("Obtains\t", result.Obtains)
 	for m := 0; m < *months; m++ {
 		fmt.Printf("%d月\t", m+1)
+
+		//fmt.Printf("当月扣税等级 %+v\t", result.DeductLevels[m])
+		dl := result.DeductLevels[m]
+		fmt.Printf("扣税等级%d/纳税额上限%.0f/预扣率%.0f%%/速算扣减%.0f\n\t", dl.Level, dl.TaxedIncomeTop, dl.DeductRate, dl.QuickCalcDeduct)
+
 		fmt.Printf("当月扣个税 %.2f\t", result.Deducts[m])
 		fmt.Printf("当月到手 %.2f\t", result.Obtains[m])
 		fmt.Println()

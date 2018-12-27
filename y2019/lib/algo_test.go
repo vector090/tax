@@ -68,67 +68,67 @@ func TestCalcDeductLevel(t *testing.T) {
 	Convey("calcDeductLevel", t, func() {
 		d, err := calcDeductLevel(35000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[0])
+		So(d, ShouldResemble, deductLevels[0])
 
 		d, err = calcDeductLevel(0)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[0])
+		So(d, ShouldResemble, deductLevels[0])
 
 		d, err = calcDeductLevel(-1)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[0])
+		So(d, ShouldResemble, deductLevels[0])
 
 		d, err = calcDeductLevel(36000 - 1)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[0])
+		So(d, ShouldResemble, deductLevels[0])
 
 		d, err = calcDeductLevel(36000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[1])
+		So(d, ShouldResemble, deductLevels[1])
 
 		d, err = calcDeductLevel(144000 - 1)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[1])
+		So(d, ShouldResemble, deductLevels[1])
 
 		d, err = calcDeductLevel(144000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[2])
+		So(d, ShouldResemble, deductLevels[2])
 
 		d, err = calcDeductLevel(300000 - 1)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[2])
+		So(d, ShouldResemble, deductLevels[2])
 
 		d, err = calcDeductLevel(300000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[3])
+		So(d, ShouldResemble, deductLevels[3])
 
 		d, err = calcDeductLevel(420000 - 1)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[3])
+		So(d, ShouldResemble, deductLevels[3])
 
 		d, err = calcDeductLevel(420000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[4])
+		So(d, ShouldResemble, deductLevels[4])
 
 		d, err = calcDeductLevel(660000 - 1)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[4])
+		So(d, ShouldResemble, deductLevels[4])
 
 		d, err = calcDeductLevel(660000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[5])
+		So(d, ShouldResemble, deductLevels[5])
 
 		d, err = calcDeductLevel(960000 - 1)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[5])
+		So(d, ShouldResemble, deductLevels[5])
 
 		d, err = calcDeductLevel(960000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[6])
+		So(d, ShouldResemble, deductLevels[6])
 
 		d, err = calcDeductLevel(1000000)
 		So(err, ShouldBeNil)
-		So(d, ShouldResemble, deducts[6])
+		So(d, ShouldResemble, deductLevels[6])
 
 		d, err = calcDeductLevel(9999990000 + 1)
 		So(err, ShouldNotBeNil)

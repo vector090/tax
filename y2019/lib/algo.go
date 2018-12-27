@@ -5,7 +5,7 @@ import (
 	"github.com/golang/glog"
 )
 
-type Deduct struct {
+type DeductLevel struct {
 	Level           int
 	TaxedIncomeTop  float64
 	DeductRate      float64
@@ -21,32 +21,28 @@ type Request struct {
 }
 
 type Result struct {
-	// 0. 累积应扣税
-	// 1. 逐月的扣税
-	// 2. 逐月的到手数
-	// 3. 合计的到手数
-	AccumulatedDeducts []float64
-	Deducts            []float64
-	Obtains            []float64
-	TotalObtains       float64
+	DeductLevels       []DeductLevel // 逐月的扣税等级
+	AccumulatedDeducts []float64     // 累积应扣税
+	Deducts            []float64     // 逐月的扣税
+	Obtains            []float64     // 逐月的到手数
+	TotalObtains       float64       // 合计的到手数
 }
 
 var (
-	deducts = []Deduct{
-		Deduct{1, 36000, 3, 0},
-		Deduct{2, 144000, 10, 2520},
-		Deduct{3, 300000, 20, 16920},
-		Deduct{4, 420000, 25, 31920},
-		Deduct{5, 660000, 30, 52920},
-		Deduct{6, 960000, 35, 85920},
-		Deduct{7, 9999990000, 45, 181920},
+	deductLevels = []DeductLevel{
+		DeductLevel{1, 36000, 3, 0},
+		DeductLevel{2, 144000, 10, 2520},
+		DeductLevel{3, 300000, 20, 16920},
+		DeductLevel{4, 420000, 25, 31920},
+		DeductLevel{5, 660000, 30, 52920},
+		DeductLevel{6, 960000, 35, 85920},
+		DeductLevel{7, 9999990000, 45, 181920},
 	}
 )
 
 func Calc(req Request) (Result, error) {
-	//fmt.Println(req)
-	//TODO
 	res := Result{
+		DeductLevels:       make([]DeductLevel, req.Months),
 		AccumulatedDeducts: make([]float64, req.Months),
 		Deducts:            make([]float64, req.Months),
 		Obtains:            make([]float64, req.Months),
@@ -61,6 +57,7 @@ func Calc(req Request) (Result, error) {
 			return res, err
 		}
 		glog.V(2).Infoln("deductLevel", d)
+		res.DeductLevels[m] = d
 		accumulatedShouldDeduct := taxedSalary*d.DeductRate/100 - d.QuickCalcDeduct
 		res.AccumulatedDeducts[m] = accumulatedShouldDeduct
 		glog.V(2).Infoln("accumulatedShouldDeduct", accumulatedShouldDeduct)
@@ -84,9 +81,9 @@ func pastDeducted(res Result, month int) float64 {
 	return res.AccumulatedDeducts[month-1]
 }
 
-func calcDeductLevel(taxedSalary float64) (Deduct, error) {
-	d := Deduct{}
-	for _, d = range deducts {
+func calcDeductLevel(taxedSalary float64) (DeductLevel, error) {
+	d := DeductLevel{}
+	for _, d = range deductLevels {
 		if taxedSalary < d.TaxedIncomeTop {
 			return d, nil
 		}

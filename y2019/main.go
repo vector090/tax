@@ -30,7 +30,13 @@ func main() {
 	}
 	//fmt.Printf("%+v\n", result)
 	fmt.Println("Months\t", *months)
-	fmt.Println("Deducts\t", result.Deducts)
-	fmt.Println("Obtains\t", result.Obtains)
-	fmt.Println("TotalObtains\t", result.TotalObtains)
+	//fmt.Println("Deducts\t", result.Deducts)
+	//fmt.Println("Obtains\t", result.Obtains)
+	for m := 0; m < *months; m++ {
+		fmt.Printf("%d月\t", m+1)
+		fmt.Printf("当月扣个税 %.2f\t", result.Deducts[m])
+		fmt.Printf("当月到手 %.2f\t", result.Obtains[m])
+		fmt.Println()
+	}
+	fmt.Println("总到手\t", result.TotalObtains)
 }
